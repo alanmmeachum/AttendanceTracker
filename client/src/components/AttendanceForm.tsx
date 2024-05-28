@@ -6,15 +6,20 @@ interface Props {
 }
 
 const AttendanceForm: React.FC<Props> = ({ http }) => {
-  const [studentId, setStudentId] = useState("");
+  const [studentId, setStudentId] = useState<Number>();
   const [status, setStatus] = useState("Present");
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
+
     try {
-      await http.post("/api/attendance", { studentId, status });
+      await http.post("/attendance", {
+        studentId: studentId,
+        status,
+      });
       alert("Attendance recorded");
     } catch (error) {
+      console.error("Error recording attendance:", error);
       alert("Error recording attendance");
     }
   };
@@ -24,7 +29,7 @@ const AttendanceForm: React.FC<Props> = ({ http }) => {
       <label>
         Student ID:
         <input
-          type="text"
+          type="number"
           value={studentId}
           onChange={(e) => setStudentId(e.target.value)}
           required

@@ -1,4 +1,6 @@
 import AttendanceForm from "./components/AttendanceForm.tsx";
+import AttendanceByDate from "./views/AttendanceByDate.tsx";
+import AttendanceList from "./views/AttendanceList.tsx";
 import axios, { AxiosInstance } from "axios";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./css/App.css";
@@ -18,6 +20,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<AttendanceForm http={http} />} />
+          <Route path="/attendance" element={<AttendanceList />} />
         </Routes>
       </BrowserRouter>
     </>

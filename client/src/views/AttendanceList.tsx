@@ -1,42 +1,61 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import AttendanceByDate from "./AttendanceByDate";
+import axios from "axios";
 
 const AttendanceList = () => {
-  const [attendanceRecords, setAttendanceRecords] = useState([]);
-  const [studentId, setStudentId] = useState('');
-  const [date, setDate] = useState('');
+  const [attendanceRecords, setAttendanceRecords] = useState<any>([]);
+  const [studentId, setStudentId] = useState(0);
+  const [date, setDate] = useState("");
 
   const fetchAttendance = async () => {
+    
     try {
-      const response = await axios.get('/api/attendance', {
-        params: { studentId, date }
+      const response = await axios.get("/attendance", {
+        params: { studentId, date },
       });
-      setAttendanceRecords(response.data);
+      setAttendanceRecords([...attendanceRecords, response.data]);
+      console.log(response.data)
     } catch (error) {
-      alert('Error fetching attendance');
+      alert("Error fetching attendance");
     }
   };
 
   return (
     <div>
-      <form onSubmit={(e) => { e.preventDefault(); fetchAttendance(); }}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          fetchAttendance();
+        }}
+      >
         <label>
           Student ID:
-          <input type="text" value={studentId} onChange={(e) => setStudentId(e.target.value)} required />
+          <input
+            type="number"
+            value={studentId}
+            onChange={(e) => setStudentId(e.target.value)}
+            required
+          />
         </label>
         <label>
           Date:
-          <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
+          <input
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            required
+          />
         </label>
         <button type="submit">Fetch Attendance</button>
       </form>
-      <ul>
-        {attendanceRecords.map(record => (
+      <AttendanceByDate />
+      {attendanceRecords.map((record) => (
+        <ul>
           <li key={record._id}>
             {record.date}: {record.status}
           </li>
-        ))}
-      </ul>
+        </ul>
+      ))}
     </div>
   );
 };

@@ -4,7 +4,7 @@ const studentSchema = new Schema(
     {
         name:{ type: String, required: true},
         grade: { type: String, required: true},
-        studentId: {type: String, required: true, unique: true}
+        studentId: {type: Number, required: true, unique: true}
     },
     {timestamps: true}
 )
