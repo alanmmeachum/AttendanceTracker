@@ -1,23 +1,52 @@
-import React, { useState, useEffect } from "react";
-import AttendanceByDate from "./AttendanceByDate";
-import axios from "axios";
+import React, { useState } from "react";
+import { AxiosInstance } from "axios";
 
-const AttendanceList = () => {
-  const [attendanceRecords, setAttendanceRecords] = useState<any>([]);
-  const [studentId, setStudentId] = useState(0);
+interface Props {
+  http: AxiosInstance;
+}
+
+interface Student {
+  _id: string;
+  name: string;
+  grade: string;
+  studentId: number;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+interface AttendanceRecord {
+  _id: string;
+  student: Student;
+  date: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+const AttendanceList: React.FC<Props> = ({ http }) => {
+  const [attendanceRecords, setAttendanceRecords] = useState<AttendanceRecord[]>([]);
+  const [studentId, setStudentId] = useState("");
   const [date, setDate] = useState("");
 
-  const fetchAttendance = async () => {
-    
-    try {
-      const response = await axios.get("/attendance", {
+  const fetchAttendance = () => {
+    http
+      .get("/attendance", {
         params: { studentId, date },
+      })
+      .then((res) => {
+        console.log("Response Data: ", res.data);
+        if (Array.isArray(res.data)) {
+          setAttendanceRecords(res.data);
+        } else {
+          setAttendanceRecords([res.data]);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("Error fetching attendance");
       });
-      setAttendanceRecords([...attendanceRecords, response.data]);
-      console.log(response.data)
-    } catch (error) {
-      alert("Error fetching attendance");
-    }
   };
 
   return (
@@ -31,7 +60,7 @@ const AttendanceList = () => {
         <label>
           Student ID:
           <input
-            type="number"
+            type="text"
             value={studentId}
             onChange={(e) => setStudentId(e.target.value)}
             required
@@ -48,14 +77,16 @@ const AttendanceList = () => {
         </label>
         <button type="submit">Fetch Attendance</button>
       </form>
-      <AttendanceByDate />
-      {attendanceRecords.map((record) => (
-        <ul>
-          <li key={record._id}>
-            {record.date}: {record.status}
+      <ul>
+        {attendanceRecords.map((record, index) => (
+          <li key={record._id} style={{ color: "black" }}>
+            Student Name: {record.student.name}<br />
+            Grade: {record.student.grade}<br />
+            Status: {record.status}<br />
+            Date: {new Date(record.date).toLocaleDateString()}
           </li>
-        </ul>
-      ))}
+        ))}
+      </ul>
     </div>
   );
 };
