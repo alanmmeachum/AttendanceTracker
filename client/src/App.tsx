@@ -20,7 +20,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<AttendanceForm http={http} />} />
-          <Route path="/attendance" element={<AttendanceList />} />
+          <Route path="/attendance" element={<AttendanceList  http={http}/>} />
         </Routes>
       </BrowserRouter>
     </>

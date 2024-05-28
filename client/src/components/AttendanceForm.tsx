@@ -6,30 +6,31 @@ interface Props {
 }
 
 const AttendanceForm: React.FC<Props> = ({ http }) => {
-  const [studentId, setStudentId] = useState<Number>();
+  const [studentId, setStudentId] = useState("");
   const [status, setStatus] = useState("Present");
 
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("Submitting attendance for student:", studentId, "with status:", status);
 
     try {
-      await http.post("/attendance", {
-        studentId: studentId,
-        status,
+      const response = await http.post("/attendance", {
+        student: studentId,
+        status: status,
       });
+      console.log("Response from server:", response.data);
       alert("Attendance recorded");
-    } catch (error) {
-      console.error("Error recording attendance:", error);
-      alert("Error recording attendance");
+    } catch (err) {
+      console.error("Error recording attendance:", err);
+      alert("Errors Marking Attendance");
     }
   };
-
   return (
     <form onSubmit={handleSubmit}>
       <label>
         Student ID:
         <input
-          type="number"
+          type="text"
           value={studentId}
           onChange={(e) => setStudentId(e.target.value)}
           required
