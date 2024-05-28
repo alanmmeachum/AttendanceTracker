@@ -1,34 +1,44 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const AttendanceByDate = () => {
-  const [date, setDate] = useState('');
-  const [attendanceRecords, setAttendanceRecords] = useState([]);
+  const [date, setDate] = useState("");
+  const [attendanceRecords, setAttendanceRecords] = useState<any[]>([]);
 
   const fetchAttendanceByDate = async () => {
     try {
-      const response = await axios.get('/api/attendance/by-date', {
-        params: { date }
+      const response = await axios.get("/api/attendance/date", {
+        params: { date },
       });
-      setAttendanceRecords(response.data);
+      setAttendanceRecords([...attendanceRecords, response.data]);
     } catch (error) {
-      alert('Error fetching attendance');
+      alert("Error fetching attendance");
     }
   };
 
   return (
     <div>
-      <form onSubmit={(e) => { e.preventDefault(); fetchAttendanceByDate(); }}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          fetchAttendanceByDate();
+        }}
+      >
         <label>
           Date:
-          <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
+          <input
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            required
+          />
         </label>
         <button type="submit">Fetch Attendance</button>
       </form>
       <ul>
-        {attendanceRecords.map(record => (
+        {attendanceRecords.map((record) => (
           <li key={record._id}>
-            {record.student.name} - {record.status}
+            {record.student} - {record.status}
           </li>
         ))}
       </ul>
