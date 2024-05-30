@@ -10,8 +10,8 @@ router.route('/students')
 router.route('/attendance')
     .get(getAttendance)
     .post(markAttendance)
-
-router.route('/attendance/:date')
+    
+router.route('/attendance/byDate')
     .get(getAttendanceByDate)
 
 router.route('/students/:studentId')

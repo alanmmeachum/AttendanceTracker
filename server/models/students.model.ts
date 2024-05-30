@@ -9,5 +9,5 @@ const studentSchema = new Schema(
     {timestamps: true}
 )
 
-const Student = model('Students', studentSchema);
+const Student = model('Student', studentSchema);
 export default Student;

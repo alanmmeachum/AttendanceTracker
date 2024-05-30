@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { AxiosInstance } from "axios";
+import AttendanceByDate from "./AttendanceByDate";
 
 interface Props {
   http: AxiosInstance;
@@ -28,7 +29,7 @@ interface AttendanceRecord {
 const AttendanceList: React.FC<Props> = ({ http }) => {
   const [attendanceRecords, setAttendanceRecords] = useState<AttendanceRecord[]>([]);
   const [studentId, setStudentId] = useState("");
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState<Date | String>();
 
   const fetchAttendance = () => {
     http
@@ -36,6 +37,7 @@ const AttendanceList: React.FC<Props> = ({ http }) => {
         params: { studentId, date },
       })
       .then((res) => {
+        console.log(date)
         console.log("Response Data: ", res.data);
         if (Array.isArray(res.data)) {
           setAttendanceRecords(res.data);
@@ -70,7 +72,6 @@ const AttendanceList: React.FC<Props> = ({ http }) => {
           Date:
           <input
             type="date"
-            value={date}
             onChange={(e) => setDate(e.target.value)}
             required
           />
@@ -87,6 +88,7 @@ const AttendanceList: React.FC<Props> = ({ http }) => {
           </li>
         ))}
       </ul>
+      <AttendanceByDate http={http} />
     </div>
   );
 };

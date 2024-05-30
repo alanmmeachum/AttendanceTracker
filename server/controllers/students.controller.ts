@@ -1,5 +1,6 @@
 import Student from "../models/students.model";
 import Attendance from "../models/attendance.model";
+import { parse } from "path";
 
 async function addStudent(req: any, res: any) {
   try {
@@ -60,71 +61,70 @@ async function deleteStudent(req: any, res: any) {
     res.status(400).json(error);
   }
 }
-
-// Marking attendance, Fetch Attendance
+//<------------------------ ↓ --------------------- ↓   Attendance  ↓ -------------------------- ↓ --------------------->
+// Marking attendance
 async function markAttendance(req: any, res: any) {
   try {
-    const { studentId, status } = req.body;
+    const { student, status } = req.body;
+    // Find the student by studentId
 
-    console.log("Received body:", req.body);
+    const studentIdNum = parseInt(student);
+    // console.log(studentIdNum)
+    const findStudent = await Student.findOne({ studentId: studentIdNum }); //have to reference the studentId here.
+    console.log("Response:", JSON.stringify(findStudent, null, 2));
 
-    if (!studentId || !status) {
-      return res.status(400).send("Missing studentId or status");
-    }
+    
 
-    const student = await Student.findOne({ studentId }).exec();
-
-    if (!student) {
+    if (!findStudent) {
       return res.status(404).send("Student not found");
     }
 
+    // Create an attendance record
+    const dateConversion = new Date()
     const attendanceRecord = new Attendance({
-      date: new Date(),
-      student: studentId,
-      status,
+      student: findStudent._id,
+      date: dateConversion.toLocaleDateString(),
+      status: status,
     });
 
-    await attendanceRecord.save();
-    return res.status(201).send("Attendance recorded");
-  } catch (error) {
-    console.error("Error marking attendance:", error);
-    return res.status(500).send("Internal Server Error");
+    const savedRecord = await attendanceRecord.save();
+    console.log("Saved Attendance Record:", savedRecord);
+
+    res.json(savedRecord);
+  } catch (err) {
+    res.status(500).json(err);
   }
 }
+// Marking attendance
 
+// Fetch Attendance
 async function getAttendance(req: any, res: any) {
-  const { studentId, date } = req.query;
+  const { studentId } = req.query;
   const student = await Student.findOne({ studentId });
 
   if (!student) {
     return res.status(404).send("Student not found");
   }
-
-  const attendanceRecords = await Attendance.find({
-    student: student.studentId,
-    date: {
-      $gte: new Date(date),
-      $lt: new Date(date).setDate(new Date(date).getDate() + 1),
-    }, // Filter by date
-  });
+  const attendanceRecords = await Attendance.find({ student: student._id })
+    .populate("student")
+    .exec();
+  // const attendanceRecords = await Attendance.find({
+  //   student: student.studentId,
+  //   date: {
+  //     $gte: new Date(date),
+  //     $lt: new Date(date).setDate(new Date(date).getDate() + 1),
+  //   }, // Filter by date
+  // });
   res.status(200).json(attendanceRecords);
 }
-
 async function getAttendanceByDate(req: any, res: any) {
   try {
-    const { date } = req.params;
-
-    // Parse date string into a Date object
-    const targetDate = new Date(date);
-
-    // Find attendance records for the specified date
-    const attendanceRecords = await Attendance.find({
-      date: {
-        $gte: new Date(targetDate.setHours(0, 0, 0)), // Start of the day
-        $lt: new Date(targetDate.setHours(23, 59, 59, 999)), // End of the day
-      },
-    });
-
+    const { date } = req.query;
+    let attendanceRecords = await Attendance.find(
+      {date: date}
+    )
+    .populate("student")
+    .exec();
     // Return the attendance records
     return res.json(attendanceRecords);
   } catch (error) {
@@ -132,7 +132,7 @@ async function getAttendanceByDate(req: any, res: any) {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 }
-// Marking attendance, Fetch Attendance
+//Fetch Attendance
 
 export {
   addStudent,
