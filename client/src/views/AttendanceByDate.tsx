@@ -1,17 +1,48 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { AxiosInstance } from "axios";
 
-const AttendanceByDate = () => {
-  const [date, setDate] = useState("");
-  const [attendanceRecords, setAttendanceRecords] = useState<any[]>([]);
+interface Props {
+  http: AxiosInstance;
+}
 
-  const fetchAttendanceByDate = async () => {
+interface Student {
+  _id: string;
+  name: string;
+  grade: string;
+  studentId: number;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+interface AttendanceRecord {
+  _id: string;
+  student: Student;
+  date: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+const AttendanceByDate: React.FC<Props> = ({ http }) => {
+  const [date, setDate] = useState<Date | String>();
+  const [attendanceRecords, setAttendanceRecords] = useState<AttendanceRecord[]>([]);
+
+  const fetchAttendanceByDate = async (e: React.FormEvent) => {
+    e.preventDefault();
     try {
-      const response = await axios.get("/api/attendance/date", {
+      const response = await http.get("/attendance/byDate", {
         params: { date },
       });
-      setAttendanceRecords([...attendanceRecords, response.data]);
-    } catch (error) {
+      console.log("Response Data:", response.data);
+      if (Array.isArray(response.data)) {
+        setAttendanceRecords(response.data);
+      } else {
+        setAttendanceRecords([response.data]);
+      }
+    } catch (err) {
+      console.log("Error recording attendance:", err);
       alert("Error fetching attendance");
     }
   };
@@ -20,15 +51,13 @@ const AttendanceByDate = () => {
     <div>
       <form
         onSubmit={(e) => {
-          e.preventDefault();
-          fetchAttendanceByDate();
+          fetchAttendanceByDate(e);
         }}
       >
         <label>
           Date:
           <input
             type="date"
-            value={date}
             onChange={(e) => setDate(e.target.value)}
             required
           />
@@ -36,9 +65,10 @@ const AttendanceByDate = () => {
         <button type="submit">Fetch Attendance</button>
       </form>
       <ul>
-        {attendanceRecords.map((record) => (
+        {attendanceRecords.map((record, index) => (
           <li key={record._id}>
-            {record.student} - {record.status}
+            Date: {record.date} - Student Name: {record.student.name} -{" "}
+            {record.status}
           </li>
         ))}
       </ul>
