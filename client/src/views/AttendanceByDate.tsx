@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { AxiosInstance } from "axios";
 
 interface Props {
@@ -42,7 +42,7 @@ const AttendanceByDate: React.FC<Props> = ({ http }) => {
         setAttendanceRecords([response.data]);
       }
     } catch (err) {
-      console.log("Error recording attendance:", err);
+      console.error("Error fetching attendance:", err);
       alert("Error fetching attendance");
     }
   };
@@ -56,19 +56,14 @@ const AttendanceByDate: React.FC<Props> = ({ http }) => {
       >
         <label>
           Date:
-          <input
-            type="date"
-            onChange={(e) => setDate(e.target.value)}
-            required
-          />
+          <input type="date" onChange={(e) => setDate(e.target.value)} required />
         </label>
         <button type="submit">Fetch Attendance</button>
       </form>
       <ul>
-        {attendanceRecords.map((record, index) => (
+        {attendanceRecords.map((record) => (
           <li key={record._id}>
-            Date: {record.date} - Student Name: {record.student.name} -{" "}
-            {record.status}
+            Date: {record.date} - Student Name: {record.student.name} - {record.status}
           </li>
         ))}
       </ul>
