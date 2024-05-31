@@ -31,60 +31,47 @@ const AttendanceList: React.FC<Props> = ({ http }) => {
   const [studentId, setStudentId] = useState("");
   const [date, setDate] = useState<Date | String>();
 
-  const fetchAttendance = () => {
-    http
-      .get("/attendance", {
+  const fetchAttendance = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await http.get("/attendance", {
         params: { studentId, date },
-      })
-      .then((res) => {
-        console.log(date)
-        console.log("Response Data: ", res.data);
-        if (Array.isArray(res.data)) {
-          setAttendanceRecords(res.data);
-        } else {
-          setAttendanceRecords([res.data]);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        alert("Error fetching attendance");
       });
+      console.log("Response Data: ", response.data);
+      if (Array.isArray(response.data)) {
+        setAttendanceRecords(response.data);
+      } else {
+        setAttendanceRecords([response.data]);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error fetching attendance");
+    }
   };
 
   return (
     <div>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          fetchAttendance();
-        }}
-      >
+      <form onSubmit={fetchAttendance}>
         <label>
           Student ID:
-          <input
-            type="text"
-            value={studentId}
-            onChange={(e) => setStudentId(e.target.value)}
-            required
-          />
+          <input type="text" value={studentId} onChange={(e) => setStudentId(e.target.value)} required />
         </label>
         <label>
           Date:
-          <input
-            type="date"
-            onChange={(e) => setDate(e.target.value)}
-            required
-          />
+          <input type="date" onChange={(e) => setDate(e.target.value)} required />
         </label>
         <button type="submit">Fetch Attendance</button>
       </form>
       <ul>
-        {attendanceRecords.map((record, index) => (
+        {attendanceRecords.map((record) => (
           <li key={record._id} style={{ color: "black" }}>
-            Student Name: {record.student.name}<br />
-            Grade: {record.student.grade}<br />
-            Status: {record.status}<br />
-            Date: {new Date(record.date).toLocaleDateString()}
+            Student Name: {record.student.name}
+            <br />
+            Grade: {record.student.grade}
+            <br />
+            Status: {record.status}
+            <br />
+            Date: {record.date}
           </li>
         ))}
       </ul>
