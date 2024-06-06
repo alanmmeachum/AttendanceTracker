@@ -1,9 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import axios, { AxiosInstance } from "axios";
-import AttendanceForm from "./components/AttendanceForm.tsx";
+// import AttendanceForm from "./components/AttendanceForm.tsx";
 import AttendanceList from "./views/AttendanceList.tsx";
+import Dashboard from "./views/Dashboard.tsx";
 import "./css/App.css";
-import "./index.css";
+import "./css/index.css";
 
 function App() {
   function createHttpClient(): AxiosInstance {
@@ -18,7 +19,8 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<AttendanceForm http={http} />} />
+          <Route path="/" element={<Dashboard />} />
+          {/* <Route path="/attendanceform" element={<AttendanceForm http={http} />} /> */}
           <Route path="/attendance" element={<AttendanceList http={http} />} />
         </Routes>
       </BrowserRouter>
