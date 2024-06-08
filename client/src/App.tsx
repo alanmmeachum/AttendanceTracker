@@ -20,7 +20,7 @@ function App() {
       <BrowserRouter>
         <Dashboard />
         <Routes>
-          <Route path="/students" element={<Students/>}/>
+          <Route path="/students" element={<Students http={http}/>}/>
           <Route path="/attendance" element={<AttendanceList http={http} />} />
         </Routes>
       </BrowserRouter>
