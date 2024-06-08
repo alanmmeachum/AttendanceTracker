@@ -1,10 +1,15 @@
 //Adding; Removing; Updating students
 
 import StudentsList from '../components/StudentsList'
-
+import { AxiosInstance } from 'axios';
 import { BarsArrowUpIcon, ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 
-export default function Students() {
+interface Props {
+  http: AxiosInstance;
+}
+
+const Students: React.FC<Props> = ({ http }) => {
+
 
   return (
     <div className="border-b lg:ml-80 mx-4 border-gray-200 pb-5 sm:flex-col sm:items-start sm:justify-around">
@@ -46,7 +51,8 @@ export default function Students() {
           </button>
         </div>
       </div>
-      <StudentsList />
+      <StudentsList http={http}/>
     </div>
   )
 }
+export default Students
