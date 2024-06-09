@@ -2,7 +2,8 @@
 
 import StudentsList from '../components/StudentsList'
 import { AxiosInstance } from 'axios';
-import { BarsArrowUpIcon, ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
+import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
+import { FormEvent, useState } from 'react';
 
 interface Props {
   http: AxiosInstance;
@@ -10,6 +11,17 @@ interface Props {
 
 const Students: React.FC<Props> = ({ http }) => {
 
+  const [searchOption, setSearchOption] = useState("All")
+  const [searchParams, setSearchParams] = useState<any>()
+  const [finalValue, setFinalValue] = useState<any>()
+
+  const handleChange = (e: { target: { value: any; }; }) => {
+    setSearchParams(e.target.value)
+  }
+
+  const handleBlur = () => {
+    setFinalValue(searchParams);
+  }
 
   return (
     <div className="border-b lg:ml-80 mx-4 border-gray-200 pb-5 sm:flex-col sm:items-start sm:justify-around">
@@ -39,19 +51,20 @@ const Students: React.FC<Props> = ({ http }) => {
               id="desktop-search-candidate"
               className="hidden w-full rounded-none rounded-l-md border-0 py-1.5 pl-10 text-sm leading-6 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:block"
               placeholder="Search students"
+              onChange={handleChange}
+              onBlur={handleBlur}
             />
           </div>
-          <button
-            type="button"
-            className="relative -ml-px inline-flex items-center gap-x-1.5 rounded-r-md px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-          >
-            <BarsArrowUpIcon className="-ml-0.5 h-5 w-5 text-gray-400" aria-hidden="true" />
-            Sort
-            <ChevronDownIcon className="-mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
+          <button className='rounded-none px-4 border-0 text-sm leading-6 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:block'>
+            <select name="studentoptions" onChange={(e) => setSearchOption(e.target.value)} id="student-options">
+              <option value="All">All</option>
+              <option value="StudentID">StudentID</option>
+              <option value="Grade">Grade</option>
+            </select>
           </button>
         </div>
       </div>
-      <StudentsList http={http}/>
+      <StudentsList http={http} searchOption={searchOption} finalValue={finalValue}/>
     </div>
   )
 }

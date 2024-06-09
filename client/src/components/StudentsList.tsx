@@ -6,6 +6,8 @@ import { useEffect, useState } from 'react';
 
 interface Props {
   http: AxiosInstance;
+  searchOption: string;
+  finalValue: number;
 }
 
 interface Student {
@@ -18,33 +20,66 @@ interface Student {
   __v: number;
 }
 
+
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-const StudentsList: React.FC<Props> = ({ http }) => {
+const StudentsList: React.FC<Props> = ({ http, searchOption, finalValue }) => {
 
   const [allStudents, setAllStudents] = useState<Student[]>([])
   
  
 useEffect(() => {
-  const getAllStudents = async() => {
-    try{
-      const response = await http.get("/students")
-      console.log("Response Data:", response.data)
-      if (Array.isArray(response.data)) {
-        setAllStudents(response.data);
-      } else {
-        setAllStudents([response.data]);
+  const getStudents = async () => {
+    if(searchOption === "All") {
+      try{
+        const response = await http.get("/students")
+        console.log("Response Data:", response.data)
+        if (Array.isArray(response.data)) {
+          setAllStudents(response.data);
+        } else {
+          setAllStudents([response.data]);
+        }
+      }
+      catch(err){
+        console.error(err)
+        alert("Error fetching students")
+      }
+    } else if (searchOption === "StudentID") {
+      try{
+        const response = await http.get(`/students/${finalValue}`)
+        console.log("Response Data:", response.data)
+        if (Array.isArray(response.data)) {
+          setAllStudents(response.data);
+        } else {
+          setAllStudents([response.data]);
+        }
+      }
+      catch(err){
+        console.error(err)
+        alert("Error fetching students")
+      }
+    } else if (searchOption === "Grade") {
+      try{
+        const response = await http.get("/students/grade", {params: { finalValue },
+      })
+        console.log("Response Data:", response.data)
+        if (Array.isArray(response.data)) {
+          setAllStudents(response.data);
+        } else {
+          setAllStudents([response.data]);
+        }
+      }
+      catch(err){
+        console.error(err)
+        alert("Error fetching students")
       }
     }
-    catch(err){
-      console.error(err)
-      alert("Error fetching students")
-    }
   }
-  getAllStudents()
-}, [])
+  getStudents()
+
+}, [searchOption, finalValue])
 
 
   return (
