@@ -3,7 +3,7 @@
 import StudentsList from '../components/StudentsList'
 import { AxiosInstance } from 'axios';
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
-import { FormEvent, useState } from 'react';
+import { useState } from 'react';
 
 interface Props {
   http: AxiosInstance;

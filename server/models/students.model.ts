@@ -1,13 +1,19 @@
-import {model, Schema} from 'mongoose';
+import { model, Schema, Document } from 'mongoose';
 
-const studentSchema = new Schema(
-    {
-        name:{ type: String, required: true},
-        grade: { type: String, required: true},
-        studentId: {type: Number, required: true, unique: true}
-    },
-    {timestamps: true}
-)
+interface IStudent extends Document {
+  name: string;
+  grade: number;
+  studentId: number;
+}
 
-const Student = model('Student', studentSchema);
+const studentSchema = new Schema<IStudent>(
+  {
+    name: { type: String, required: true },
+    grade: { type: Number, required: true },
+    studentId: { type: Number, required: true, unique: true }
+  },
+  { timestamps: true }
+);
+
+const Student = model<IStudent>('Student', studentSchema);
 export default Student;
