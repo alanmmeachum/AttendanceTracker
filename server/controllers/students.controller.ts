@@ -1,5 +1,6 @@
 import Student from "../models/students.model";
 import Attendance from "../models/attendance.model";
+import { Request, Response } from "express";
 
 async function addStudent(req: any, res: any) {
   try {
@@ -24,13 +25,38 @@ async function getAllStudents(req: any, res: any) {
 
 async function getOneStudent(req: any, res: any) {
   try {
-    const oneStudent = await Student.findOne(req.params);
-    res.json(oneStudent);
+    const { studentId } = req.params;
+    const student = await Student.findOne({ studentId: studentId });
+
+    if (!student) {
+      res.status(404).json({ message: "Student not found" });
+      return;
+    }
+
+    res.status(200).json(student);
   } catch (error) {
-    console.error(error);
-    res.status(400).json(error);
+    console.error("Error fetching student:", error);
+    res.status(500).json({ message: "Internal Server Error", error });
   }
 }
+
+async function getStudentByGrade(req: Request, res: Response) {
+  try {
+    const { grade } = req.params;
+    const students = await Student.find({ grade });
+
+    if (!students) {
+      res.status(404).json({ message: "No Students Found in that Grade" });
+      return;
+    }
+
+    res.status(200).json(students);
+  } catch (error) {
+    console.error("Error fetching students:", error);
+    res.status(500).json({ message: "Internal Server Error", error });
+  }
+}
+
 
 async function updateStudent(req: any, res: any) {
   const options = {
@@ -139,6 +165,7 @@ export {
   updateStudent,
   deleteStudent,
   getAllStudents,
+  getStudentByGrade,
   getOneStudent,
   markAttendance,
   getAttendance,

@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import axios, { AxiosInstance } from "axios";
-import AttendanceList from "./views/AttendanceList.tsx";
+import Attendance from "./views/Attendance.tsx";
 import Dashboard from "./views/Dashboard.tsx";
 import Students from "./views/Students.tsx";
 import "./css/App.css";
@@ -20,8 +20,8 @@ function App() {
       <BrowserRouter>
         <Dashboard />
         <Routes>
-          <Route path="/students" element={<Students http={http}/>}/>
-          <Route path="/attendance" element={<AttendanceList http={http} />} />
+          <Route path="/students" element={<Students http={http} />} />
+          <Route path="/attendance" element={<Attendance http={http} />} />
         </Routes>
       </BrowserRouter>
     </>
