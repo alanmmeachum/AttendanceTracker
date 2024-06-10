@@ -1,5 +1,4 @@
 //Adding; Removing; Updating students
-
 import StudentsList from '../components/StudentsList'
 import { AxiosInstance } from 'axios';
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
@@ -13,14 +12,9 @@ const Students: React.FC<Props> = ({ http }) => {
 
   const [searchOption, setSearchOption] = useState("All")
   const [searchParams, setSearchParams] = useState<any>()
-  const [finalValue, setFinalValue] = useState<any>()
 
   const handleChange = (e: { target: { value: any; }; }) => {
     setSearchParams(e.target.value)
-  }
-
-  const handleBlur = () => {
-    setFinalValue(searchParams);
   }
 
   return (
@@ -52,7 +46,6 @@ const Students: React.FC<Props> = ({ http }) => {
               className="hidden w-full rounded-none rounded-l-md border-0 py-1.5 pl-10 text-sm leading-6 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:block"
               placeholder="Search students"
               onChange={handleChange}
-              onBlur={handleBlur}
             />
           </div>
           <button className='rounded-none px-4 border-0 text-sm leading-6 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:block'>
@@ -64,7 +57,7 @@ const Students: React.FC<Props> = ({ http }) => {
           </button>
         </div>
       </div>
-      <StudentsList http={http} searchOption={searchOption} finalValue={finalValue}/>
+      <StudentsList http={http} searchOption={searchOption} searchParams={searchParams}/>
     </div>
   )
 }
