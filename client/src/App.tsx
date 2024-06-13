@@ -25,6 +25,7 @@ function App() {
       <BrowserRouter>
         <Dashboard />
         <Routes>
+          <Route />
           <Route path="/popup" element={<AddStudent http={http}/>} />
           <Route path="/students/:id" element={<EditStudent http={http}/>} />
           <Route path="/students" element={<Students http={http} />} />
