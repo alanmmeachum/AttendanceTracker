@@ -25,7 +25,7 @@ import {
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 
 const navigation = [
-  { name: 'Dashboard', href: '/', icon: HomeIcon, current: true },
+  { name: 'Dashboard', href: '/', icon: HomeIcon, current: false },
   { name: 'Students', href: '/students', icon: UsersIcon, current: false },
   { name: 'View Attendance', href: '/attendance', icon: CalendarIcon, current: false },
   { name: 'Mark Attendance', href: '/markattendance', icon: CalendarIcon, current: false },
@@ -98,7 +98,7 @@ const Dashboard = () => {
                         <li>
                           <ul role="list" className="-mx-2 space-y-1">
                             {navigation.map((item) => (
-                              <li key={item.name}>
+                              <li key={item.name} >
                                 <a
                                   href={item.href}
                                   className={classNames(
@@ -259,7 +259,7 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <main className="py-10">
+          <main className="py-2">
             <div className="px-4 sm:px-6 lg:px-8">{/* Your content */}</div>
           </main>
         </div>

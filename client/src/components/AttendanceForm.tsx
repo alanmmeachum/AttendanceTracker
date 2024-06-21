@@ -26,7 +26,7 @@ const AttendanceForm: React.FC<Props> = ({ http }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="mx-80">
       <label>
         Student ID:
         <input type="text" onChange={(e) => setStudentId(e.target.value)} required />
