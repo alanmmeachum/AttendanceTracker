@@ -2,7 +2,7 @@ import { Menu, MenuButton, MenuItem, MenuItems, Transition } from "@headlessui/r
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
 import { AxiosInstance } from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   http: AxiosInstance;
@@ -25,35 +25,36 @@ function classNames(...classes: string[]) {
 }
 
 const StudentsList: React.FC<Props> = ({ http, searchOption, searchParams }) => {
-
-  const navigate = useNavigate()
-  const {id} = useParams()
+  const navigate = useNavigate();
+  // const { id } = useParams();
 
   const [allStudents, setAllStudents] = useState<Student[]>([]);
 
   useEffect(() => {
-    http.get('/students')
+    http
+      .get("/students")
       .then((res) => {
-        setAllStudents(res.data)
+        setAllStudents(res.data);
       })
       .catch((err) => {
-        console.log(`Error retrieving students:`, err)
-      })
-  }, [allStudents])
+        console.log(`Error retrieving students:`, err);
+      });
+  }, [allStudents]);
 
   const handleDelete = (currentId: number) => {
-    http.delete(`/students/${currentId}`)
-    .then((res) => {
-      console.log(res.data)
-      setAllStudents(prevStudents => prevStudents.filter(student => student.studentId !== student.studentId))
-    })
-    .catch((err) => {
-      console.error(err)
-    })
-  }
+    http
+      .delete(`/students/${currentId}`)
+      .then((res) => {
+        console.log(res.data);
+        setAllStudents((prevStudents) => prevStudents.filter((student) => student.studentId !== student.studentId));
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
 
   const getStudents = async () => {
-    if (searchOption === "All") {
+    if (searchOption == "All") {
       try {
         const response = await http.get("/students");
         console.log("Response Data:", response.data);
@@ -66,20 +67,19 @@ const StudentsList: React.FC<Props> = ({ http, searchOption, searchParams }) => 
         console.error(err);
         alert("Error fetching students");
       }
-    } else if (searchOption === "StudentID") {
+    } else if (searchOption == "StudentID") {
       try {
         const response = await http.get(`/students/${searchParams}`);
-        console.log("Response Data:", response.data);
-        if (Array.isArray(response.data)) {
-          setAllStudents(response.data);
-        } else {
-          setAllStudents([response.data]);
-        }
+        // const response = allStudents.filter((id) => id.studentId == searchParams);
+        //Trying to figure out why I can't filter my students list
+        console.log("Response Data:", response);
+        setAllStudents((prevStudents) => prevStudents.filter((student) => student.studentId !== student.studentId));
+        console.log(allStudents);
       } catch (err) {
         console.error(err);
         alert("Error fetching students");
       }
-    } else if (searchOption === "Grade") {
+    } else if (searchOption == "Grade") {
       try {
         const response = await http.get(`/students/grade/${searchParams}`);
         console.log("Response Data:", response.data);
@@ -96,9 +96,8 @@ const StudentsList: React.FC<Props> = ({ http, searchOption, searchParams }) => 
   };
 
   const createStudent = () => {
-    navigate('/popup')
-  }
-
+    navigate("/popup");
+  };
 
   return (
     <div>
@@ -120,7 +119,7 @@ const StudentsList: React.FC<Props> = ({ http, searchOption, searchParams }) => 
       </div>
       <ul role="list" className=" divide-y divide-gray-100">
         {allStudents.map((student) => (
-          <li key={student.studentId} className="flex items-center justify-between gap-x-6 py-5" >
+          <li key={student.studentId} className="flex items-center justify-between gap-x-6 py-5">
             <div className="min-w-0">
               <div className="flex items-start gap-x-3">
                 <p className="text-sm font-semibold leading-6 text-gray-900">{student.name}</p>

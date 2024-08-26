@@ -10,7 +10,7 @@ interface Props {
 
 const Students: React.FC<Props> = ({ http }) => {
 
-  const [searchOption, setSearchOption] = useState("All")
+  const [searchOption, setSearchOption] = useState("")
   const [searchParams, setSearchParams] = useState<any>()
 
   const handleChange = (e: { target: { value: any; }; }) => {
