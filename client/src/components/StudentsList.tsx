@@ -26,7 +26,6 @@ function classNames(...classes: string[]) {
 
 const StudentsList: React.FC<Props> = ({ http, searchOption, searchParams }) => {
   const navigate = useNavigate();
-  // const { id } = useParams();
 
   const [allStudents, setAllStudents] = useState<Student[]>([]);
 
@@ -39,7 +38,7 @@ const StudentsList: React.FC<Props> = ({ http, searchOption, searchParams }) => 
       .catch((err) => {
         console.log(`Error retrieving students:`, err);
       });
-  }, [allStudents]);
+  }, []);
 
   const handleDelete = (currentId: number) => {
     http
@@ -53,6 +52,7 @@ const StudentsList: React.FC<Props> = ({ http, searchOption, searchParams }) => 
       });
   };
 
+  //This function now works as of 08/26 
   const getStudents = async () => {
     if (searchOption == "All") {
       try {
@@ -61,7 +61,7 @@ const StudentsList: React.FC<Props> = ({ http, searchOption, searchParams }) => 
         if (Array.isArray(response.data)) {
           setAllStudents(response.data);
         } else {
-          setAllStudents([response.data]);
+          setAllStudents(response.data);
         }
       } catch (err) {
         console.error(err);
@@ -70,11 +70,12 @@ const StudentsList: React.FC<Props> = ({ http, searchOption, searchParams }) => 
     } else if (searchOption == "StudentID") {
       try {
         const response = await http.get(`/students/${searchParams}`);
-        // const response = allStudents.filter((id) => id.studentId == searchParams);
-        //Trying to figure out why I can't filter my students list
-        console.log("Response Data:", response);
-        setAllStudents((prevStudents) => prevStudents.filter((student) => student.studentId !== student.studentId));
-        console.log(allStudents);
+        console.log("Response Data:", response.data);
+        if (Array.isArray(response.data)) {
+          setAllStudents(response.data);
+        } else {
+          setAllStudents([response.data]);
+        }
       } catch (err) {
         console.error(err);
         alert("Error fetching students");
