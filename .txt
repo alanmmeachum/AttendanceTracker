@@ -1,0 +1,13 @@
+* Birthday and School has been added to the students schema, need to update all parts of code where this schema is being validated
+* Need to setup the code StudentDetails button to popup like the edit button and displays just the student name, grade, birthday, and school information
+* If we delete the student, how do simulatenously delete all those students records along with it
+* Extra Features
+----> Still need to add graphs/charts to display overall attendance
+----> Mark Attendance needs to be setup still
+----> Reports will pull up Students attended this month per grade, and what school they come from
+----> ----> The purpose of the reports tab is to add insights for the school to make recruiting decisions and where they should extend their marketing efforts
+----> Dashboard will just give a brief summary of current attendance for the week and month (we can probably just link that in from the reports tab)
+----> ----> It will also provide alerts regarding due dates for attendance records to be sent in
+----> Fetch attendance should only display students who were present not both absent and present
+----> Need to clean up the View Attendance UI
+----> What if we want to search the student by name and we only include the first name and not the last name? (creating a fuzzy search)
