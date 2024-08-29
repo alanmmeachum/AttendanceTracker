@@ -40,6 +40,7 @@ const AttendanceByDate: React.FC<Props> = ({ http }) => {
         setAttendanceRecords(response.data);
       } else {
         setAttendanceRecords([response.data]);
+        console.log(response.data)
       }
     } catch (err) {
       console.error("Error fetching attendance:", err);
@@ -47,14 +48,25 @@ const AttendanceByDate: React.FC<Props> = ({ http }) => {
     }
   };
 
+  //Still a WIP; Need to figure out why it's not deleting the record
+  const handleDelete = (currentId: string) => {
+    http
+      .delete(`/attendance/${currentId}`)
+      .then((res) => {
+        console.log(res.data);
+        setAttendanceRecords((prevAttendance) => prevAttendance.filter((record) => record._id !== record._id));
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
   return (
     <div className="max-w-fit p-4">
       <form onSubmit={fetchAttendanceByDate} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <div className="mb-4">
           <h1 className="text-3xl font-bold text-gray-800 mb-6">Fetch All Attendance by Date</h1>
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Date:
-          </label>
+          <label className="block text-gray-700 text-sm font-bold mb-2">Date:</label>
           <input
             type="date"
             onChange={(e) => setDate(e.target.value)}
@@ -74,9 +86,20 @@ const AttendanceByDate: React.FC<Props> = ({ http }) => {
       <ul className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 overflow-x-auto max-h-80">
         {attendanceRecords.map((record) => (
           <li key={record._id} className="mb-4">
-            <p className="text-gray-700"><strong>Date:</strong> {record.date}</p>
-            <p className="text-gray-700"><strong>Student Name:</strong> {record.student.name}</p>
-            <p className="text-gray-700"><strong>Status:</strong> {record.status}</p>
+            <p className="text-gray-700">
+              <strong>Date:</strong> {record.date}
+            </p>
+            <p className="text-gray-700">
+              <strong>Student Name:</strong> {record.student.name}
+            </p>
+            <p className="text-gray-700">
+              <strong>Status:</strong> {record.status}
+            </p>
+            <button
+                onClick={() => handleDelete(record._id)}
+              >
+                Delete<span className="sr-only">, {record._id}</span>
+              </button>
           </li>
         ))}
       </ul>

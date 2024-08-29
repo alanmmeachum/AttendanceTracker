@@ -140,6 +140,17 @@ async function getAttendance(req: any, res: any) {
   }
 }
 
+//Deleting only 1 recorded attendance
+async function deleteAttendance(req: any, res: any) {
+    try {
+      const deletedAttendance = await Attendance.findOneAndDelete(req.params);
+      res.json(deletedAttendance);
+    } catch (error) {
+      console.error(error);
+      res.status(400).json(error);
+    }
+  }
+
 async function getAttendanceByDate(req: any, res: any) {
   try {
     const { date } = req.query;
@@ -169,5 +180,6 @@ export {
   getOneStudent,
   markAttendance,
   getAttendance,
+  deleteAttendance, 
   getAttendanceByDate,
 };

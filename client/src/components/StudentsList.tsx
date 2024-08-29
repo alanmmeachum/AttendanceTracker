@@ -45,7 +45,7 @@ const StudentsList: React.FC<Props> = ({ http, searchOption, searchParams }) => 
       .delete(`/students/${currentId}`)
       .then((res) => {
         console.log(res.data);
-        setAllStudents((prevStudents) => prevStudents.filter((student) => student.studentId !== student.studentId));
+        setAllStudents((prevStudents) => prevStudents.filter((student) => student.studentId !== currentId));
       })
       .catch((err) => {
         console.error(err);
@@ -134,10 +134,11 @@ const StudentsList: React.FC<Props> = ({ http, searchOption, searchParams }) => 
             </div>
             <div className="flex flex-none items-center gap-x-4">
               <a
-                // href={project.href}
+                href={`/students/${student.studentId}`}
+                //Modify to point to the correct route for Marking attendance 
                 className="hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
               >
-                Student Details<span className="sr-only">, {student.name}</span>
+                Mark Attendance<span className="sr-only">, {student.name}</span>
               </a>
               <Menu as="div" className="relative flex-none">
                 <MenuButton className="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900">

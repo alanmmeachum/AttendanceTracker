@@ -7,7 +7,7 @@ interface Props {
 
 const AttendanceForm: React.FC<Props> = ({ http }) => {
   const [studentId, setStudentId] = useState<String>("");
-  const [status, setStatus] = useState<String>("Present");
+  const [status, setStatus] = useState<String>("Present"); 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
