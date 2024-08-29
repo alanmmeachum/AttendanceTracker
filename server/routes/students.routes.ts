@@ -1,4 +1,4 @@
-import {addStudent, deleteStudent, updateStudent, getAllStudents, getOneStudent, markAttendance, getAttendance, getAttendanceByDate, getStudentByGrade} from "../controllers/students.controller";
+import {addStudent, deleteStudent, updateStudent, getAllStudents, getOneStudent, markAttendance, getAttendance, getAttendanceByDate, getStudentByGrade, deleteAttendance} from "../controllers/students.controller";
 import {Router} from 'express';
 
 const router = Router()
@@ -18,6 +18,9 @@ router.route('/students/grade/:grade')
 router.route('/attendance')
     .get(getAttendance)
     .post(markAttendance)
+
+router.route('/attendance/:id')
+    .delete(deleteAttendance)
     
 router.route('/attendance/byDate')
     .get(getAttendanceByDate)
