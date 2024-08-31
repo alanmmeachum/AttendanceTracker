@@ -11,9 +11,11 @@ const AddStudent: React.FC<Props> = ({ http }) => {
   const navigate = useNavigate();
 
   const [newStudent, setNewStudent] = useState<any>({
-    name: "",
+    name: String,
     grade: Number,
     studentId: Number,
+    birthday: String,
+    school: String
   });
 
   const onSubmitHandler = async (e: React.FormEvent) => {
@@ -48,6 +50,10 @@ const AddStudent: React.FC<Props> = ({ http }) => {
           <input type="number" name="grade" onChange={onChangeHandler} />
           <label htmlFor="studentId">StudentId: </label>
           <input type="number" name="studentId" onChange={onChangeHandler} />
+          <label htmlFor="birthday">Birthday: </label>
+          <input type="text" name="birthday" onChange={onChangeHandler} />
+          <label htmlFor="school">School: </label>
+          <input type="text" name="school" onChange={onChangeHandler} />
           <div className="flex flex-row justify-around">
             <button className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Submit</button>
             <button className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" onClick={handleClose}>Close</button>
