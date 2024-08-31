@@ -15,6 +15,8 @@ interface Student {
   name: string;
   grade: string;
   studentId: number;
+  birthday: string;
+  school: string;
   createdAt: string;
   updatedAt: string;
   __v: number;
@@ -52,7 +54,7 @@ const StudentsList: React.FC<Props> = ({ http, searchOption, searchParams }) => 
       });
   };
 
-  //This function now works as of 08/26 
+  //This function now works as of 08/26
   const getStudents = async () => {
     if (searchOption == "All") {
       try {
@@ -131,11 +133,17 @@ const StudentsList: React.FC<Props> = ({ http, searchOption, searchParams }) => 
               <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
                 <p className="whitespace-nowrap">StudentID: {student.studentId}</p>
               </div>
+              <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
+                <p className="whitespace-nowrap">School: {student.school}</p>
+              </div>
+              <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
+                <p className="whitespace-nowrap">Birthday: {student.birthday}</p>
+              </div>
             </div>
             <div className="flex flex-none items-center gap-x-4">
               <a
                 href={`/students/${student.studentId}`}
-                //Modify to point to the correct route for Marking attendance 
+                //Modify to point to the correct route for Marking attendance
                 className="hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
               >
                 Mark Attendance<span className="sr-only">, {student.name}</span>

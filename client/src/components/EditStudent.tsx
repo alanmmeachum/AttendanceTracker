@@ -12,9 +12,11 @@ const EditStudent: React.FC<Props> = ({ http }) => {
   const { id } = useParams();
 
   const [updateStudent, setUpdateStudent] = useState<any>({
-    name: "",
+    name: String,
     grade: Number,
     studentId: Number,
+    birthday: String,
+    school: String
   });
 
   useEffect(() => {
@@ -26,6 +28,8 @@ const EditStudent: React.FC<Props> = ({ http }) => {
           name: res.data.name,
           grade: res.data.grade,
           studentId: res.data.studentId,
+          birthday: res.data.birthday,
+          school: res.data.school
         });
       })
       .catch((err) => {
@@ -66,6 +70,10 @@ const EditStudent: React.FC<Props> = ({ http }) => {
           <input type="number" name="grade" value={updateStudent.grade} onChange={onChangeHandler} />
           <label htmlFor="studentId">StudentId: </label>
           <input type="number" name="studentId" value={updateStudent.studentId} onChange={onChangeHandler} />
+          <label htmlFor="birthday">Birthday: </label>
+          <input type="text" name="studentId" value={updateStudent.birthday} onChange={onChangeHandler} />
+          <label htmlFor="school">School: </label>
+          <input type="text" name="school" value={updateStudent.school} onChange={onChangeHandler} />
           <div className="flex flex-row justify-around">
             <button className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
               Submit
